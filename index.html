@@ -406,14 +406,7 @@ function renderTen(){
 }
 $('#q-ten').addEventListener('input', renderTen); renderTen();
 
-// notes (data checks)
-const noBadge = people.filter(p=>!p.badge).map(p=>p.nama);
-const etira = ten.filter(b=>b.cat==='Etira').length;
-$('#notes').innerHTML = `<b>Catatan pengecekan data</b><ul>
-  <li>Total badge di setiap kolom sudah cocok dengan jumlah per kategori (All Access ${bt['ALL ACCESS']}, Crew ${bt['CREW']}, Talent ${bt['TALENT']}, Tenant ${bt['TENANT']}, Security ${bt['SECURITY']}, Supporting - Fire Fighter ${bt['Supporting - Fire Fighter']}, Supporting - First Aider ${bt['Supporting - First Aider']}).</li>
-  <li>Steering Committee (${noBadge.join(', ')}) belum diberi tag badge di daftar tim.</li>
-  <li>Logistik: bagan mencantumkan <b>Uwah</b>, sedangkan daftar tim mencantumkan <b>Ngurah</b> (Profit). Perlu dipastikan apakah orang yang sama.</li>
-  <li>${etira} baris tenant bernama "Etira" masing-masing 6 badge. ${noQuota ? noQuota + " tenant belum punya kuota." : "Semua tenant sudah punya kuota."} ${tal.filter(b=>!b.vals["TALENT"]).length ? tal.filter(b=>!b.vals["TALENT"]).length + " talent belum punya kuota." : "Semua talent sudah punya kuota."}</li></ul>`;
+
 
 // ===== tabs
 const tabs = document.querySelectorAll('nav.tabs button');
