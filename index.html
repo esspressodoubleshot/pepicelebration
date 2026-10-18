@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Panitia Pepi Celebration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: header band → tab bar (sticky) → 3 views: Bagan (tree + division grid), Daftar (filterable table), Badge (ID-card totals + quota tables) */
+:root{
+  --bg:#f3f6f1; --surface:#ffffff; --surface-2:#eaf0e6; --fg:#16241a; --muted:#5b6b5f; --line:#d5dfd2;
+  --green:#1f6b2a; --green-ink:#ffffff; --green-soft:#e2efdf;
+  --aa:#a8740a; --crew:#2e7d32; --talent:#ad1457; --tenant:#00838f; --sec:#455a64; --ff:#c62828; --fa:#1565c0; --none:#8a948c; --sc:#1b5e20; --log:#6d4c41; --val:#5e35b1;
+  --warn-bg:#fff4dc; --warn-fg:#7a4e00;
+  --font-d:"Bricolage Grotesque", "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-b:"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1611; --surface:#17211a; --surface-2:#1e2b21; --fg:#e6efe7; --muted:#9fb0a3; --line:#2c3b2f;
+  --green:#3f9b4c; --green-ink:#ffffff; --green-soft:#1d3322;
+  --aa:#e0a83a; --crew:#5fb865; --talent:#e0609a; --tenant:#38b6c2; --sec:#90a4ae; --ff:#ef6a6a; --fa:#6aa6ef; --none:#7d887f; --sc:#81c784; --log:#c8a99a; --val:#a99be8;
+  --warn-bg:#3a2e12; --warn-fg:#f3cf86; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1611; --surface:#17211a; --surface-2:#1e2b21; --fg:#e6efe7; --muted:#9fb0a3; --line:#2c3b2f;
+  --green:#3f9b4c; --green-ink:#ffffff; --green-soft:#1d3322;
+  --aa:#e0a83a; --crew:#5fb865; --talent:#e0609a; --tenant:#38b6c2; --sec:#90a4ae; --ff:#ef6a6a; --fa:#6aa6ef; --none:#7d887f; --sc:#81c784; --log:#c8a99a; --val:#a99be8;
+  --warn-bg:#3a2e12; --warn-fg:#f3cf86; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-b);font-size:14px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--font-d);text-wrap:balance;margin:0}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+header{background:var(--green);color:var(--green-ink)}
+header .wrap{padding-block:28px 22px;display:flex;flex-wrap:wrap;gap:20px 40px;align-items:flex-end;justify-content:space-between}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.8;font-weight:600}
+header h1{font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-.01em;line-height:1.1;margin-top:4px}
+header p{margin:6px 0 0;opacity:.85;max-width:60ch}
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.stat{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:8px 12px;min-width:92px}
+.stat b{display:block;font-family:var(--font-d);font-size:22px;line-height:1.1}
+.stat span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+
+/* tabs */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto}
+nav.tabs button{font:inherit;font-weight:600;background:none;border:0;color:var(--muted);padding:14px 14px 12px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--green);border-bottom-color:var(--green)}
+nav.tabs button:focus-visible{outline:2px solid var(--green);outline-offset:-2px}
+main .wrap{padding-block:24px 48px}
+.sec-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between;margin-bottom:16px}
+.sec-head h2{font-size:22px}
+.sec-head p{margin:0;color:var(--muted)}
+
+/* badge pill */
+.bdg{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px 3px 7px;border-radius:999px;white-space:nowrap;
+  color:var(--k);background:color-mix(in srgb,var(--k) 13%,var(--surface));border:1px solid color-mix(in srgb,var(--k) 35%,var(--surface))}
+.bdg::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--k)}
+.k-aa{--k:var(--aa)}.k-crew{--k:var(--crew)}.k-talent{--k:var(--talent)}.k-tenant{--k:var(--tenant)}.k-sec{--k:var(--sec)}.k-ff{--k:var(--ff)}.k-fa{--k:var(--fa)}.k-none{--k:var(--none)}.k-sc{--k:var(--sc)}.k-log{--k:var(--log)}.k-val{--k:var(--val)}
+
+/* ===== BAGAN ===== */
+.legend{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:12px}
+.tree{display:flex;flex-direction:column;align-items:center;gap:0;margin-bottom:8px}
+.node{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 18px;text-align:center;min-width:220px;max-width:100%}
+.node .role{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+.node .who{font-family:var(--font-d);font-size:18px;font-weight:600}
+.node.top{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+.node.top .role{color:var(--green-ink);opacity:.85}
+.vline{width:2px;height:18px;background:var(--line)}
+.tree{width:100%}
+.trow{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px) minmax(0,1fr);align-items:center;width:100%}
+.trow>.node{grid-column:2;min-width:0}
+.trow .side{grid-column:3;display:flex;align-items:center;min-width:0}
+.side .dash{flex:0 0 48px;height:0;border-top:2px dashed color-mix(in srgb,var(--fg) 45%,var(--surface))}
+.side .node{min-width:0;flex:0 1 300px}
+.node.sek{border-color:#558b2f}
+.node.sek .role{color:#fff;background:#558b2f;margin:-10px -18px 8px;padding:7px 12px;border-radius:var(--r) var(--r) 0 0}
+.vrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px) minmax(0,1fr);width:100%}
+.vrow .vline{grid-column:2;justify-self:center}
+@media (max-width:720px){.trow{grid-template-columns:minmax(0,1fr);gap:10px}.trow>.node,.trow .side{grid-column:1}.side .dash{display:none}.side .node{flex:1}.vrow{grid-template-columns:minmax(0,1fr)}.vrow .vline{grid-column:1}}
+.bus{height:2px;background:var(--line);margin:0 auto;width:calc(100% - 220px);max-width:1080px}
+.div-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:18px;align-items:start}
+.div{--c:#2e7d32;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;min-width:0}
+.div-h{background:var(--c);color:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.div-h h3{font-size:15px;line-height:1.2;font-weight:600}
+.div-h .lead{font-size:12px;opacity:.9;margin-top:2px}
+.div-h .cnt{font-family:var(--font-d);font-weight:800;font-size:18px;background:rgba(255,255,255,.18);border-radius:6px;padding:0 8px;line-height:1.6}
+.div ol{list-style:none;margin:0;padding:6px 0}
+.div li{display:flex;align-items:center;gap:8px;padding:4px 12px;font-size:13px}
+.div li:nth-child(even){background:color-mix(in srgb,var(--c) 7%,var(--surface))}
+.div li .n{color:var(--muted);width:20px;text-align:right;font-size:11px;flex:none}
+.div li .nm{flex:1;min-width:0}
+.div li .nm small{color:var(--muted)}
+.dot{width:9px;height:9px;border-radius:50%;flex:none;background:var(--k)}
+.sub{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--c);padding:10px 12px 2px;border-top:1px solid color-mix(in srgb,var(--c) 40%,var(--surface));display:flex;justify-content:space-between}
+:root[data-theme="dark"] .sub{color:color-mix(in srgb,var(--c) 55%,#fff)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sub{color:color-mix(in srgb,var(--c) 55%,#fff)}}
+.div li.hit{outline:2px solid var(--aa);outline-offset:-2px}
+.chart-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+
+/* inputs */
+.ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+input[type=search],select{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-width:0}
+input[type=search]{flex:1 1 240px}
+select{flex:0 1 220px}
+input:focus-visible,select:focus-visible{outline:2px solid var(--green);outline-offset:1px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;display:inline-flex;gap:6px;align-items:center}
+.chip .c{color:var(--muted);font-weight:500}
+.chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+.chip[aria-pressed="true"] .c{color:var(--green-ink);opacity:.85}
+.chip:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.result{color:var(--muted);font-size:13px;margin-bottom:8px}
+
+/* table */
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+table{border-collapse:collapse;width:100%;min-width:620px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);position:sticky;top:0;cursor:pointer;user-select:none;white-space:nowrap}
+th[aria-sort="ascending"]::after{content:" ▲";font-size:9px}
+th[aria-sort="descending"]::after{content:" ▼";font-size:9px}
+tbody tr:hover{background:color-mix(in srgb,var(--green) 5%,var(--surface))}
+td.no{color:var(--muted);width:56px}
+td .bag{display:inline-flex;align-items:center;gap:8px}
+td .bag i{width:10px;height:10px;border-radius:3px;background:var(--c);flex:none}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+
+/* ===== BADGE ===== */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:28px}
+.idc{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px 14px 14px;text-align:center;overflow:hidden}
+.idc::before{content:"";position:absolute;top:0;left:0;right:0;height:8px;background:var(--k)}
+.idc .slot{width:30px;height:6px;border-radius:4px;background:var(--bg);border:1px solid var(--line);margin:0 auto 12px}
+.idc b{display:block;font-family:var(--font-d);font-size:30px;font-weight:800;line-height:1;color:var(--k)}
+.idc span{display:block;margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.idc small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.idc.total{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+.idc.total::before{background:rgba(255,255,255,.35)}
+.idc.total b{color:var(--green-ink)}
+.idc.total small{color:var(--green-ink);opacity:.8}
+.bgrid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.bgrid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;min-width:0}
+.panel>h3{font-size:16px;padding:14px 16px 4px}
+.panel>p{margin:0;padding:0 16px 10px;color:var(--muted);font-size:12px}
+.panel table{min-width:520px;border-top:1px solid var(--line)}
+.panel td.v,.panel th.v{text-align:right}
+.panel th{cursor:default}
+.panel tr.grp td{background:var(--surface-2);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:7px 12px}
+.panel tr.sum td{font-weight:700;border-top:2px solid var(--line)}
+.zero{color:var(--muted)}
+.tag-warn{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--warn-bg);color:var(--warn-fg);padding:2px 7px;border-radius:4px;margin-left:6px;white-space:nowrap}
+.ten{list-style:none;margin:0;padding:0 0 6px;border-top:1px solid var(--line)}
+.ten li{display:grid;grid-template-columns:minmax(0,1fr) 90px 40px;gap:10px;align-items:center;padding:7px 16px;border-bottom:1px solid var(--line);font-size:13px}
+.ten li:last-child{border-bottom:0}
+.bar{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--tenant);border-radius:4px}
+.ten .q{text-align:right;font-weight:700}
+.ten .nm{min-width:0;overflow-wrap:anywhere}
+.panel .ctl{padding:0 16px;margin-bottom:10px}
+.note{margin-top:20px;background:var(--warn-bg);color:var(--warn-fg);border-radius:var(--r);padding:12px 16px;font-size:13px}
+.note>b{display:block;margin-bottom:4px}
+.note ul{margin:0;padding-left:18px}
+/* ===== KONSUMSI ===== */
+.meal-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.meal{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.meal .d{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.meal b{display:block;font-family:var(--font-d);font-size:30px;font-weight:800;line-height:1.1;margin-top:4px}
+.meal .m{font-size:13px;font-weight:600}
+.meal .pct{height:6px;border-radius:3px;background:var(--surface-2);margin-top:10px;overflow:hidden}
+.meal .pct i{display:block;height:100%;background:var(--green);border-radius:3px}
+.meal.all{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+.meal.all .d{color:var(--green-ink);opacity:.8}
+.meal.dinner b{color:color-mix(in srgb,var(--talent) 70%,var(--fg))}
+.meal.lunch b{color:color-mix(in srgb,var(--aa) 80%,var(--fg))}
+table.kons{min-width:820px}
+table.kons th{cursor:default;text-align:center}
+table.kons th.l, table.kons td.l{text-align:left}
+table.kons td.v{text-align:center}
+table.kons thead tr:first-child th{border-bottom:1px solid var(--line)}
+table.kons tr.grp td{background:var(--surface-2);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:7px 12px}
+table.kons tr.ksub td{font-weight:700;background:color-mix(in srgb,var(--green) 6%,var(--surface))}
+table.kons tr.sum td{font-weight:800;border-top:2px solid var(--line);background:var(--green-soft)}
+table.kons td.pic{color:var(--muted);font-size:13px}
+/* ===== INVITATION ===== */
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;align-items:start}
+.inv-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.inv-list li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:8px 16px;border-bottom:1px solid var(--line);font-size:13px}
+.inv-list li:last-child{border-bottom:0}
+.inv-list .n{color:var(--muted);font-size:11px;text-align:right}
+.inv-list .nm{min-width:0;overflow-wrap:anywhere}
+.inv-list .nm small{display:block;color:var(--muted);font-size:12px}
+.inv-list .q{font-weight:700;white-space:nowrap}
+.inv-list li.empty-slot .nm{color:var(--muted);font-style:italic}
+.panel .tot{font-family:var(--font-d);font-weight:800;color:var(--green)}
+.sup-co{border-top:1px solid var(--line)}
+.sup-co summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 16px;font-weight:600}
+.sup-co summary::-webkit-details-marker{display:none}
+.sup-co summary::before{content:"▸";color:var(--muted);margin-right:8px;transition:transform .15s}
+.sup-co[open] summary::before{transform:rotate(90deg)}
+.sup-co summary .ct{font-size:12px;font-weight:700;color:var(--green);background:var(--green-soft);border-radius:999px;padding:1px 9px}
+.sup-co summary:focus-visible{outline:2px solid var(--green);outline-offset:-2px}
+.sup-co ul{list-style:none;margin:0;padding:0 16px 10px 40px}
+.sup-co li{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.sup-co li:last-child{border-bottom:0}
+.sup-co li span:last-child{color:var(--muted);text-align:right}
+.inv-wide{grid-column:1/-1}
+@media (min-width:960px){.inv-span2{grid-column:span 2}}
+.sup-tools{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 12px}
+.sup-tools select{flex:1 1 200px;max-width:none}
+.sup-tools button{font:inherit;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:8px 12px}
+.sup-tools button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.sup-body{max-height:640px;overflow:auto;border-top:1px solid var(--line)}
+.sup-body .sup-co:first-child{border-top:0}
+.sup-co summary>span:first-child{flex:1;text-align:left;min-width:0}
+footer{color:var(--muted);font-size:12px;padding-block:0 32px}
+@media (max-width:520px){.bus{display:none}.side .dash{display:none}.tier{gap:10px}.node{min-width:0;width:100%}}
+@media (prefers-reduced-motion:no-preference){.view{animation:fade .25s ease}@keyframes fade{from{opacity:.4}to{opacity:1}}}
+</style>
+
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Pepito Supermarket · 25 Tahun</div>
+      <h1>Pepi Celebration Details</h1>
+     
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Tampilan">
+  <div class="wrap" role="tablist">
+    <button role="tab" id="t-bagan" aria-controls="v-bagan" data-v="bagan">Chart Panitia</button>
+    <button role="tab" id="t-daftar" aria-controls="v-daftar" data-v="daftar">List Panitia</button>
+    <button role="tab" id="t-badge" aria-controls="v-badge" data-v="badge">Badge List</button>
+    <button role="tab" id="t-konsumsi" aria-controls="v-konsumsi" data-v="konsumsi">Konsumsi Panitia</button>
+    <button role="tab" id="t-invitation" aria-controls="v-invitation" data-v="invitation">Invitation List</button>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <!-- BAGAN -->
+    <section class="view" id="v-bagan" role="tabpanel" aria-labelledby="t-bagan">
+      <div class="chart-tools">
+        <input type="search" id="q-chart" placeholder="Cari nama di bagan…" aria-label="Cari nama di bagan">
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="tree" id="tree"></div>
+      <div class="div-grid" id="divgrid"></div>
+    </section>
+
+    <!-- DAFTAR -->
+    <section class="view" id="v-daftar" role="tabpanel" aria-labelledby="t-daftar" hidden>
+      <div class="sec-head"><h2>Daftar Tim Panitia</h2></div>
+      <div class="ctl">
+        <input type="search" id="q-list" placeholder="Cari nama, bagian, atau dept…" aria-label="Cari">
+        <select id="f-bagian" aria-label="Filter bagian"></select>
+        <select id="f-dept" aria-label="Filter dept"></select>
+      </div>
+      <div class="ctl"><div class="chips" id="f-badge" role="group" aria-label="Filter tag badge"></div></div>
+      <div class="result" id="res"></div>
+      <div class="tbl-wrap">
+        <table id="tbl">
+          <thead><tr>
+            <th data-k="no" aria-sort="ascending">No</th><th data-k="nama">Nama</th><th data-k="bagian">Bagian</th><th data-k="dept">Dept</th><th data-k="badge">Tag Badge</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- BADGE -->
+    <section class="view" id="v-badge" role="tabpanel" aria-labelledby="t-badge" hidden>
+      <div class="sec-head"><h2>Rekap Kebutuhan Badge</h2></div>
+      <div class="cards" id="bcards"></div>
+      <div class="panel" style="margin-bottom:20px">
+        <h3>Panitia, Keamanan &amp; Medis</h3>
+        <p>Badge panitia internal dan pihak keamanan eksternal.</p>
+        <div style="overflow-x:auto"><table id="t-pan" style="min-width:860px"></table></div>
+      </div>
+      <div class="bgrid">
+        <div style="display:grid;gap:20px;min-width:0">
+          <div class="panel">
+            <h3>Talent / Pengisi Acara</h3>
+            <p>Badge TALENT per artis atau grup.</p>
+            <div style="overflow-x:auto"><table id="t-tal"></table></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Tenant</h3>
+          <p id="ten-sub"></p>
+          <div class="ctl"><input type="search" id="q-ten" placeholder="Cari tenant / supplier…" aria-label="Cari tenant"></div>
+          <ul class="ten" id="ten"></ul>
+        </div>
+      </div>
+      <div class="note" id="notes"></div>
+    </section>
+
+    <!-- KONSUMSI -->
+    <section class="view" id="v-konsumsi" role="tabpanel" aria-labelledby="t-konsumsi" hidden>
+      <div class="sec-head"><h2>List Konsumsi Panitia</h2></div>
+      <div class="meal-cards" id="meal-cards"></div>
+      <div class="ctl"><input type="search" id="q-kons" placeholder="Cari dept atau PIC…" aria-label="Cari konsumsi"></div>
+      <div class="tbl-wrap"><table class="kons" id="t-kons"></table></div>
+      <div class="note" id="kons-notes"></div>
+    </section>
+
+    <!-- INVITATION -->
+    <section class="view" id="v-invitation" role="tabpanel" aria-labelledby="t-invitation" hidden>
+      <div class="sec-head"><h2>Daftar Invitation</h2></div>
+      <div class="meal-cards" id="inv-cards" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr))"></div>
+      <div class="ctl"><input type="search" id="q-inv" placeholder="Cari nama tamu, perusahaan, atau jabatan…" aria-label="Cari undangan"></div>
+      <div class="inv-grid" id="inv-grid"></div>
+      <div class="note" id="inv-notes"></div>
+    </section>
+  </div>
+</main>
+<footer><div class="wrap">missyully Oct2026</div></footer>
+
+<script>
+const DATA = {"top": {"STEERING COMMITTEE": "Jeffry · Janice", "EVENT DIRECTOR": "Melinda", "BENDAHARA": "Adi Astra, Dewa Ayu, Lia", "VICE CHAIRMAN": "Nick", "SEKRETARIAT & ADMINISTRASI": "Vio"}, "divs": [{"raw": "EVENT & ACTIVITY", "lead": "Melinda", "color": "#C62828", "count": 12, "groups": [{"name": null, "members": ["Era", "Nick", "Ghufron", "Freejata", "Julia", "Jean", "Yully", "Ratih", "Kevin", "Axel", "Depri", "Vio"]}]}, {"raw": "TALENT & BACKSTAGE", "lead": "Jaya", "color": "#AD1457", "count": 8, "groups": [{"name": null, "members": ["Jaya Putra", "Margaretha", "Theana", "Raden", "Mutia", "Desak", "Diva", "Rio"]}]}, {"raw": "PRODUCTION", "lead": "Rohman", "color": "#6A1B9A", "count": 5, "groups": [{"name": null, "members": ["Rohman", "Alfi", "Yahya", "Yusuf", "Rizal"]}]}, {"raw": "LOGISTIK", "lead": "Ngurah Adi", "color": "#5D4037", "count": 22, "groups": [{"name": null, "members": ["Ngurah Adi", "Dama", "Metri", "Imron Rifai", "Mulyono"]}, {"name": "Supporting - Logistic", "members": ["Arifin", "Made Widya", "Kamali", "Uwah", "Okta", "Martinus Haman", "Firman", "Muhtar Anang Jaya", "Muhammad Adhar", "Ariando Derik", "Nico R Aditanama", "Bima Mahendra", "Anjas", "Putu Aryantika", "Daniel Passarella", "Wanda", "Wayan Mara"]}]}, {"raw": "VIP & GUEST RELATIONS", "lead": "Lenny & Widi", "color": "#B8860B", "count": 15, "groups": [{"name": null, "members": ["Widi", "Ronald", "Lenny", "Melani", "Tini", "Anthony", "Diah", "Ola", "Anis", "Feny", "Komang", "Widari", "Steven", "Dika", "Saskia"]}]}, {"raw": "REGISTRATION & TICKETING", "lead": "Ulvi", "color": "#1565C0", "count": 43, "groups": [{"name": null, "members": ["Ulvi", "Ariel", "Hari Angga", "Irianto", "Irvan", "Tristan", "Agus Martika"]}, {"name": "Security Check", "members": ["Amirul", "Gede Suriadi", "Benny"]}, {"name": "Registration", "members": ["Eka", "Desi", "Sisil", "Caca", "Visca", "Dea", "Afia", "Eta", "Vina", "Artini", "Ni Kadek Kristinayanti", "Tiara Rosi Wardhani SE", "Eva Oktavia Dewi", "Hendra Fauzi Wiswara", "Ferdian Misyayan Azhari", "Siwi"]}, {"name": "Ticketing", "members": ["Rockles", "Willy", "Adi", "Nyoman Kardila"]}, {"name": "Pit Stop", "members": ["Markus", "Ita", "Emik", "Amik", "Astra", "Deasy"]}, {"name": "Gate In", "members": ["Adi Suarpala", "Adrian", "Najih"]}, {"name": "Gate Out", "members": ["Mega", "Marince Lende"]}, {"name": "Gate VIP", "members": ["Syella", "Casey"]}]}, {"raw": "TENANT", "lead": "Yully", "color": "#00838F", "count": 12, "groups": [{"name": null, "members": ["Wira Putra (PBH QSR)", "Dian (PBH)", "Wiwit (QSR)", "Astiti (Gourmet", "Joni (21+)", "Rizki (21+)", "Clara (Supplier)", "Yudek (Supplier)", "Agus Arya (Supplier)", "Wandari (UMKM)", "Ferry (UMKM)", "Weda Widiasmara (UMKM)"]}]}, {"raw": "CATERING", "lead": "Fendi", "color": "#00838F", "count": 10, "groups": [{"name": null, "members": ["Eka Melasti", "Fendiana", "Josephine", "Dita", "Astuti", "Widya", "Wiriyanti", "Ratna Rosma", "Dewa Ayu Rizky", "Rimba"]}]}, {"raw": "DOCUMENTATION", "lead": "Agil", "color": "#283593", "count": 5, "groups": [{"name": null, "members": ["Agil", "Komang", "Agus", "Putri", "Valen"]}]}, {"raw": "SECURITY & SAFETY", "lead": "Subiran", "color": "#37474F", "count": 31, "groups": [{"name": null, "members": ["Ardi Nurcahyadi", "Subiran", "Indra Prayoga", "Gung Ari", "Sulton", "Ngurah Tirta", "Hendra", "Komang Ardi", "Gus Dodi"]}, {"name": "Supporting - First Aider", "members": ["Ari Purwa", "Putu Debby", "Angga Nur W", "Doni Trisetyo Edi", "I Komang Gandi Sugita", "I Putu Ari Widiana"]}, {"name": "Supporting - Fire Fighter", "members": ["Alfin Adi Saputra", "Putu Ery Pradana", "Indra Bayu Arseta", "Flavianus Pangka", "Hironimus Rutuk", "Ni Wayan Sunyi", "Ida Ayu Diah Intan Sari", "I Kadek Bayu Pangestu"]}, {"name": "Supporting - Vallet", "members": ["Firmansyah", "Akhmad Jaelani", "I Wayan Ledy Aryawan", "Erwin Rizaldy", "I Kadek Juliartawan", "Wawan Setiawan", "Candra Agus Irawan", "I Wayan Gede Okta Purnawan"]}]}, {"raw": "IT", "lead": "Sastra", "color": "#2E7D32", "count": 10, "groups": [{"name": null, "members": ["Sastrawangsa", "Adji", "Paul", "Tony", "Zendy", "Yoga", "Jerry", "Rudy", "Agus", "Bagix"]}]}, {"raw": "SEMBAHYANG", "lead": "Oka", "color": "#E65100", "count": 8, "groups": [{"name": null, "members": ["Gusti Oka", "Sayu", "Surya", "Wayan Kariana", "Hari Wirianta", "Kadek Angga Dwipa", "Supratman", "Arya Wirata"]}]}], "people": [{"no": 1, "nama": "Jeffry", "bagian": "Steering Committee", "dept": "Managing Director", "badge": "Steering Committee"}, {"no": 2, "nama": "Janice", "bagian": "Steering Committee", "dept": "MD", "badge": "Steering Committee"}, {"no": 3, "nama": "Melinda", "bagian": "Event Director", "dept": "Profit", "badge": "All Access"}, {"no": 4, "nama": "Adi Astra", "bagian": "Bendahara", "dept": "Profit", "badge": "Crew"}, {"no": 5, "nama": "Dewa Ayu", "bagian": "Bendahara", "dept": "Profit", "badge": "Crew"}, {"no": 6, "nama": "Lia", "bagian": "Bendahara", "dept": "Profit", "badge": "Crew"}, {"no": 7, "nama": "Ghufron", "bagian": "Event & Activity", "dept": "HC", "badge": "All Access"}, {"no": 8, "nama": "Nick", "bagian": "Vice Chairman", "dept": "Marketing", "badge": "All Access"}, {"no": 9, "nama": "Vio", "bagian": "Sekretariat & Administrasi", "dept": "Marketing", "badge": "All Access"}, {"no": 10, "nama": "Era", "bagian": "Event & Activity", "dept": "Marketing", "badge": "All Access"}, {"no": 11, "nama": "Ratih", "bagian": "Event & Activity", "dept": "Marketing", "badge": "All Access"}, {"no": 12, "nama": "Axel", "bagian": "Event & Activity", "dept": "Marketing", "badge": "All Access"}, {"no": 13, "nama": "Depri", "bagian": "Event & Activity", "dept": "Marketing", "badge": "All Access"}, {"no": 14, "nama": "Julia", "bagian": "Event & Activity", "dept": "Marketing", "badge": "All Access"}, {"no": 15, "nama": "Jean", "bagian": "Event & Activity", "dept": "Marketing", "badge": "All Access"}, {"no": 16, "nama": "Kevin", "bagian": "Event & Activity", "dept": "Marketing", "badge": "All Access"}, {"no": 17, "nama": "Freejata", "bagian": "Event & Activity", "dept": "OPR", "badge": "All Access"}, {"no": 18, "nama": "Yully", "bagian": "Event & Activity", "dept": "SC", "badge": "All Access"}, {"no": 19, "nama": "Jaya Putra", "bagian": "Talent & Backstage", "dept": "HC", "badge": "All Access"}, {"no": 20, "nama": "Desak", "bagian": "Talent & Backstage", "dept": "HC", "badge": "All Access"}, {"no": 21, "nama": "Rio", "bagian": "Talent & Backstage", "dept": "HC", "badge": "All Access"}, {"no": 22, "nama": "Raden", "bagian": "Talent & Backstage", "dept": "Marketing", "badge": "All Access"}, {"no": 23, "nama": "Mutia", "bagian": "Talent & Backstage", "dept": "Marketing", "badge": "All Access"}, {"no": 24, "nama": "Diva", "bagian": "Talent & Backstage", "dept": "Marketing", "badge": "All Access"}, {"no": 25, "nama": "Margaretha", "bagian": "Talent & Backstage", "dept": "Profit", "badge": "All Access"}, {"no": 26, "nama": "Theana", "bagian": "Talent & Backstage", "dept": "Profit", "badge": "All Access"}, {"no": 27, "nama": "Rohman", "bagian": "Production", "dept": "Marketing", "badge": "All Access"}, {"no": 28, "nama": "Alfi", "bagian": "Production", "dept": "Marketing", "badge": "All Access"}, {"no": 29, "nama": "Yahya", "bagian": "Production", "dept": "Marketing", "badge": "All Access"}, {"no": 30, "nama": "Yusuf", "bagian": "Production", "dept": "Engineering", "badge": "All Access"}, {"no": 31, "nama": "Rizal", "bagian": "Production", "dept": "Engineering", "badge": "All Access"}, {"no": 32, "nama": "Dama", "bagian": "Logistik", "dept": "Asset", "badge": "All Access"}, {"no": 33, "nama": "Made Widya", "bagian": "Logistik", "dept": "Asset", "badge": "Supporting - Logistic"}, {"no": 34, "nama": "Ariando Derik", "bagian": "Logistik", "dept": "DC", "badge": "Supporting - Logistic"}, {"no": 35, "nama": "Bima Mahendra", "bagian": "Logistik", "dept": "DC", "badge": "Supporting - Logistic"}, {"no": 36, "nama": "Daniel Passarella", "bagian": "Logistik", "dept": "DC", "badge": "Supporting - Logistic"}, {"no": 37, "nama": "Firman", "bagian": "Logistik", "dept": "DC", "badge": "Supporting - Logistic"}, {"no": 38, "nama": "Martinus Haman", "bagian": "Logistik", "dept": "DC", "badge": "Supporting - Logistic"}, {"no": 39, "nama": "Muhammad Adhar", "bagian": "Logistik", "dept": "DC", "badge": "Supporting - Logistic"}, {"no": 40, "nama": "Muhtar Anang Jaya", "bagian": "Logistik", "dept": "DC", "badge": "Supporting - Logistic"}, {"no": 41, "nama": "Nico R Aditanama", "bagian": "Logistik", "dept": "DC", "badge": "Supporting - Logistic"}, {"no": 42, "nama": "Putu Aryantika", "bagian": "Logistik", "dept": "DC", "badge": "Supporting - Logistic"}, {"no": 43, "nama": "Metri", "bagian": "Logistik", "dept": "DC", "badge": "All Access"}, {"no": 44, "nama": "Anjas", "bagian": "Logistik", "dept": "GA", "badge": "Supporting - Logistic"}, {"no": 45, "nama": "Arifin", "bagian": "Logistik", "dept": "GA", "badge": "Supporting - Logistic"}, {"no": 46, "nama": "Ngurah Adi", "bagian": "Logistik", "dept": "GA", "badge": "All Access"}, {"no": 47, "nama": "Okta", "bagian": "Logistik", "dept": "GA", "badge": "Supporting - Logistic"}, {"no": 48, "nama": "Kamali", "bagian": "Logistik", "dept": "IC", "badge": "Supporting - Logistic"}, {"no": 49, "nama": "Imron Rifai", "bagian": "Logistik", "dept": "OPR", "badge": "Crew"}, {"no": 50, "nama": "Mulyono", "bagian": "Logistik", "dept": "OPR", "badge": "Crew"}, {"no": 51, "nama": "Wanda", "bagian": "Logistik", "dept": "OPR", "badge": "Supporting - Logistic"}, {"no": 52, "nama": "Wayan Mara", "bagian": "Logistik", "dept": "OPR", "badge": "Supporting - Logistic"}, {"no": 53, "nama": "Ngurah", "bagian": "Logistik", "dept": "Profit", "badge": "Supporting - Logistic"}, {"no": 54, "nama": "Widi", "bagian": "VIP & Guest Relations", "dept": "HC", "badge": "Crew"}, {"no": 55, "nama": "Ronald", "bagian": "VIP & Guest Relations", "dept": "Coorporate", "badge": "Crew"}, {"no": 56, "nama": "Lenny", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "All Access"}, {"no": 57, "nama": "Melani", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "All Access"}, {"no": 58, "nama": "Tini", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "All Access"}, {"no": 59, "nama": "Anthony", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "All Access"}, {"no": 60, "nama": "Diah", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "Crew"}, {"no": 61, "nama": "Ola", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "Crew"}, {"no": 62, "nama": "Anis", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "Crew"}, {"no": 63, "nama": "Feny", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "Crew"}, {"no": 64, "nama": "Komang", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "Crew"}, {"no": 65, "nama": "Widari", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "Crew"}, {"no": 66, "nama": "Steven", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "Crew"}, {"no": 67, "nama": "Dika", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "Crew"}, {"no": 68, "nama": "Saskia", "bagian": "VIP & Guest Relations", "dept": "MD", "badge": "Crew"}, {"no": 69, "nama": "Gede Suriadi", "bagian": "Registration & Ticketing", "dept": "DC", "badge": "Crew"}, {"no": 70, "nama": "Benny", "bagian": "Registration & Ticketing", "dept": "DC", "badge": "Crew"}, {"no": 71, "nama": "Mega", "bagian": "Registration & Ticketing", "dept": "DC", "badge": "Crew"}, {"no": 72, "nama": "Marince Lende", "bagian": "Registration & Ticketing", "dept": "DC", "badge": "Crew"}, {"no": 73, "nama": "Eta", "bagian": "Registration & Ticketing", "dept": "HC", "badge": "Crew"}, {"no": 74, "nama": "Irvan", "bagian": "Registration & Ticketing", "dept": "HC", "badge": "Crew"}, {"no": 75, "nama": "Markus", "bagian": "Registration & Ticketing", "dept": "HC", "badge": "Crew"}, {"no": 76, "nama": "Ita", "bagian": "Registration & Ticketing", "dept": "HC", "badge": "Crew"}, {"no": 77, "nama": "Emik", "bagian": "Registration & Ticketing", "dept": "HC", "badge": "Crew"}, {"no": 78, "nama": "Amik", "bagian": "Registration & Ticketing", "dept": "HC", "badge": "Crew"}, {"no": 79, "nama": "Astra", "bagian": "Registration & Ticketing", "dept": "HC", "badge": "Crew"}, {"no": 80, "nama": "Deasy", "bagian": "Registration & Ticketing", "dept": "HC", "badge": "Crew"}, {"no": 81, "nama": "Agus Martika", "bagian": "Registration & Ticketing", "dept": "HC", "badge": "Crew"}, {"no": 82, "nama": "Siwi", "bagian": "Registration & Ticketing", "dept": "Infra", "badge": "Crew"}, {"no": 83, "nama": "Irianto", "bagian": "Registration & Ticketing", "dept": "IT", "badge": "Crew"}, {"no": 84, "nama": "Rockles", "bagian": "Registration & Ticketing", "dept": "IT", "badge": "Crew"}, {"no": 85, "nama": "Willy", "bagian": "Registration & Ticketing", "dept": "IT", "badge": "Crew"}, {"no": 86, "nama": "Adi", "bagian": "Registration & Ticketing", "dept": "IT", "badge": "Crew"}, {"no": 87, "nama": "Nyoman Kardila", "bagian": "Registration & Ticketing", "dept": "IT", "badge": "Crew"}, {"no": 88, "nama": "Hari Angga", "bagian": "Registration & Ticketing", "dept": "OPR", "badge": "Crew"}, {"no": 89, "nama": "Ni Kadek Kristinayanti", "bagian": "Registration & Ticketing", "dept": "OPR", "badge": "Crew"}, {"no": 90, "nama": "Tiara Rosi Wardhani SE", "bagian": "Registration & Ticketing", "dept": "OPR", "badge": "Crew"}, {"no": 91, "nama": "Eva Oktavia Dewi", "bagian": "Registration & Ticketing", "dept": "OPR", "badge": "Crew"}, {"no": 92, "nama": "Hendra Fauzi Wiswara", "bagian": "Registration & Ticketing", "dept": "OPR", "badge": "Crew"}, {"no": 93, "nama": "Ferdian Misyayan Azhari", "bagian": "Registration & Ticketing", "dept": "OPR", "badge": "Crew"}, {"no": 94, "nama": "Ulvi", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "All Access"}, {"no": 95, "nama": "Ariel", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 96, "nama": "Amirul", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 97, "nama": "Eka", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 98, "nama": "Desi", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 99, "nama": "Sisil", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 100, "nama": "Caca", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 101, "nama": "Visca", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 102, "nama": "Dea", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 103, "nama": "Afia", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 104, "nama": "Vina", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 105, "nama": "Artini", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 106, "nama": "Tristan", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 107, "nama": "Adi Suarpala", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 108, "nama": "Adrian", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 109, "nama": "Najih", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 110, "nama": "Syella", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 111, "nama": "Casey", "bagian": "Registration & Ticketing", "dept": "SDD", "badge": "Crew"}, {"no": 112, "nama": "Wira Putra", "bagian": "Tenant", "dept": "Culinary", "badge": "Crew"}, {"no": 113, "nama": "Dian", "bagian": "Tenant", "dept": "Culinary", "badge": "Crew"}, {"no": 114, "nama": "Wiwit", "bagian": "Tenant", "dept": "Culinary", "badge": "Crew"}, {"no": 115, "nama": "Joni", "bagian": "Tenant", "dept": "MD", "badge": "Crew"}, {"no": 116, "nama": "Rizki", "bagian": "Tenant", "dept": "MD", "badge": "Crew"}, {"no": 117, "nama": "Clara", "bagian": "Tenant", "dept": "MD", "badge": "Crew"}, {"no": 118, "nama": "Astiti", "bagian": "Tenant", "dept": "OPR", "badge": "Crew"}, {"no": 119, "nama": "Yudek", "bagian": "Tenant", "dept": "OPR", "badge": "Crew"}, {"no": 120, "nama": "Agus Arya", "bagian": "Tenant", "dept": "OPR", "badge": "Crew"}, {"no": 121, "nama": "Wandari", "bagian": "Tenant", "dept": "OPR", "badge": "Crew"}, {"no": 122, "nama": "Ferry", "bagian": "Tenant", "dept": "OPR", "badge": "Crew"}, {"no": 123, "nama": "Weda Widiasmara", "bagian": "Tenant", "dept": "OPR", "badge": "Crew"}, {"no": 124, "nama": "Josephine", "bagian": "Catering", "dept": "HC", "badge": "All Access"}, {"no": 125, "nama": "Fendiana", "bagian": "Catering", "dept": "MD", "badge": "All Access"}, {"no": 126, "nama": "Ratna Rosma", "bagian": "Catering", "dept": "MD", "badge": "All Access"}, {"no": 127, "nama": "Wiriyanti", "bagian": "Catering", "dept": "OPR", "badge": "All Access"}, {"no": 128, "nama": "Dewa Ayu Rizky", "bagian": "Catering", "dept": "OPR", "badge": "Crew"}, {"no": 129, "nama": "Rimba", "bagian": "Catering", "dept": "OPR", "badge": "Crew"}, {"no": 130, "nama": "Eka Melasti", "bagian": "Catering", "dept": "Procurement", "badge": "All Access"}, {"no": 131, "nama": "Widya", "bagian": "Catering", "dept": "Procurement", "badge": "All Access"}, {"no": 132, "nama": "Dita", "bagian": "Catering", "dept": "Profit", "badge": "All Access"}, {"no": 133, "nama": "Astuti", "bagian": "Catering", "dept": "Profit", "badge": "All Access"}, {"no": 134, "nama": "Agil", "bagian": "Documentation", "dept": "Marketing", "badge": "Crew"}, {"no": 135, "nama": "Komang Marketing", "bagian": "Documentation", "dept": "Marketing", "badge": "Crew"}, {"no": 136, "nama": "Agus", "bagian": "Documentation", "dept": "Marketing", "badge": "Crew"}, {"no": 137, "nama": "Putri", "bagian": "Documentation", "dept": "Marketing", "badge": "Crew"}, {"no": 138, "nama": "Valen", "bagian": "Documentation", "dept": "Marketing", "badge": "Crew"}, {"no": 139, "nama": "Ardi Nurcahyadi", "bagian": "Security & Safety", "dept": "HSE", "badge": "Crew"}, {"no": 140, "nama": "Subiran", "bagian": "Security & Safety", "dept": "HSE", "badge": "Crew"}, {"no": 141, "nama": "Indra Prayoga", "bagian": "Security & Safety", "dept": "HSE", "badge": "Crew"}, {"no": 142, "nama": "Gung Ari", "bagian": "Security & Safety", "dept": "HSE", "badge": "Crew"}, {"no": 143, "nama": "Sulton", "bagian": "Security & Safety", "dept": "HSE", "badge": "Crew"}, {"no": 144, "nama": "Ngurah Tirta", "bagian": "Security & Safety", "dept": "Legal", "badge": "Crew"}, {"no": 145, "nama": "Hendra", "bagian": "Security & Safety", "dept": "Legal", "badge": "Crew"}, {"no": 146, "nama": "Komang Ardi", "bagian": "Security & Safety", "dept": "Legal", "badge": "Crew"}, {"no": 147, "nama": "Gus Dodi", "bagian": "Security & Safety", "dept": "Legal", "badge": "Crew"}, {"no": 148, "nama": "Ari Purwa", "bagian": "Supporting - First Aider", "dept": "HSE", "badge": "Supporting - First Aider"}, {"no": 149, "nama": "Putu Debby", "bagian": "Supporting - First Aider", "dept": "HSE", "badge": "Supporting - First Aider"}, {"no": 150, "nama": "Angga Nur W", "bagian": "Supporting - First Aider", "dept": "OPR", "badge": "Supporting - First Aider"}, {"no": 151, "nama": "Doni Trisetyo Edi", "bagian": "Supporting - First Aider", "dept": "OPR", "badge": "Supporting - First Aider"}, {"no": 152, "nama": "I Komang Gandi Sugita", "bagian": "Supporting - First Aider", "dept": "OPR", "badge": "Supporting - First Aider"}, {"no": 153, "nama": "I Putu Ari Widiana", "bagian": "Supporting - First Aider", "dept": "OPR", "badge": "Supporting - First Aider"}, {"no": 154, "nama": "Alfin Adi Saputra", "bagian": "Supporting - Fire Fighter", "dept": "OPR", "badge": "Supporting - Fire Fighter"}, {"no": 155, "nama": "Putu Ery Pradana", "bagian": "Supporting - Fire Fighter", "dept": "OPR", "badge": "Supporting - Fire Fighter"}, {"no": 156, "nama": "Indra Bayu Arseta", "bagian": "Supporting - Fire Fighter", "dept": "OPR", "badge": "Supporting - Fire Fighter"}, {"no": 157, "nama": "Flavianus Pangka", "bagian": "Supporting - Fire Fighter", "dept": "DC", "badge": "Supporting - Fire Fighter"}, {"no": 158, "nama": "Hironimus Rutuk", "bagian": "Supporting - Fire Fighter", "dept": "DC", "badge": "Supporting - Fire Fighter"}, {"no": 159, "nama": "Ni Wayan Sunyi", "bagian": "Supporting - Fire Fighter", "dept": "OPR", "badge": "Supporting - Fire Fighter"}, {"no": 160, "nama": "Ida Ayu Diah Intan Sari", "bagian": "Supporting - Fire Fighter", "dept": "OPR", "badge": "Supporting - Fire Fighter"}, {"no": 161, "nama": "I Kadek Bayu Pangestu", "bagian": "Supporting - Fire Fighter", "dept": "OPR", "badge": "Supporting - Fire Fighter"}, {"no": 162, "nama": "Firmansyah", "bagian": "Supporting - Vallet", "dept": "OPR", "badge": "Supporting - Vallet"}, {"no": 163, "nama": "Akhmad Jaelani", "bagian": "Supporting - Vallet", "dept": "OPR", "badge": "Supporting - Vallet"}, {"no": 164, "nama": "I Wayan Ledy Aryawan", "bagian": "Supporting - Vallet", "dept": "OPR", "badge": "Supporting - Vallet"}, {"no": 165, "nama": "Erwin Rizaldy", "bagian": "Supporting - Vallet", "dept": "OPR", "badge": "Supporting - Vallet"}, {"no": 166, "nama": "I Kadek Juliartawan", "bagian": "Supporting - Vallet", "dept": "OPR", "badge": "Supporting - Vallet"}, {"no": 167, "nama": "Wawan Setiawan", "bagian": "Supporting - Vallet", "dept": "OPR", "badge": "Supporting - Vallet"}, {"no": 168, "nama": "Candra Agus Irawan", "bagian": "Supporting - Vallet", "dept": "OPR", "badge": "Supporting - Vallet"}, {"no": 169, "nama": "I Wayan Gede Okta Purnawan", "bagian": "Supporting - Vallet", "dept": "OPR", "badge": "Supporting - Vallet"}, {"no": 170, "nama": "Sastrawangsa", "bagian": "IT", "dept": "IT", "badge": "Crew"}, {"no": 171, "nama": "Adji", "bagian": "IT", "dept": "IT", "badge": "Crew"}, {"no": 172, "nama": "Paul", "bagian": "IT", "dept": "IT", "badge": "Crew"}, {"no": 173, "nama": "Tony", "bagian": "IT", "dept": "IT", "badge": "Crew"}, {"no": 174, "nama": "Zendy", "bagian": "IT", "dept": "IT", "badge": "Crew"}, {"no": 175, "nama": "Yoga", "bagian": "IT", "dept": "IT", "badge": "Crew"}, {"no": 176, "nama": "Jerry", "bagian": "IT", "dept": "IT", "badge": "Crew"}, {"no": 177, "nama": "Rudy", "bagian": "IT", "dept": "IT", "badge": "Crew"}, {"no": 178, "nama": "Agus", "bagian": "IT", "dept": "IT", "badge": "Crew"}, {"no": 179, "nama": "Bagix", "bagian": "IT", "dept": "IT", "badge": "Crew"}, {"no": 180, "nama": "Gusti Oka", "bagian": "Sembahyang", "dept": "GA", "badge": "Crew"}, {"no": 181, "nama": "Sayu", "bagian": "Sembahyang", "dept": "HC", "badge": "Crew"}, {"no": 182, "nama": "Surya", "bagian": "Sembahyang", "dept": "GA", "badge": "Crew"}, {"no": 183, "nama": "Wayan Kariana", "bagian": "Sembahyang", "dept": "OPR", "badge": "Crew"}, {"no": 184, "nama": "Hari Wirianta", "bagian": "Sembahyang", "dept": "OPR", "badge": "Crew"}, {"no": 185, "nama": "Kadek Angga Dwipa", "bagian": "Sembahyang", "dept": "OPR", "badge": "Crew"}, {"no": 186, "nama": "Supratman", "bagian": "Sembahyang", "dept": "OPR", "badge": "Crew"}, {"no": 187, "nama": "Arya Wirata", "bagian": "Sembahyang", "dept": "OPR", "badge": "Crew"}], "badge": [{"no": 1, "cat": "STERRING COMMITTE", "vals": {"ALL ACCESS": 2}, "row": 4, "k": 2, "seg": 0, "grp": "panitia"}, {"no": 2, "cat": "PANITIA", "vals": {"ALL ACCESS": 42, "CREW": 104, "SUPPORTING - LOGISTIC": 17, "SUPPORTING - VALLET": 8, "SUPPORTING - FIRE FIGHTER": 8, "SUPPORTING - FIRST AIDER": 6}, "row": 5, "k": 185, "seg": 0, "grp": "panitia"}, {"no": 3, "cat": "SECURITY", "vals": {"SECURITY": 50}, "row": 6, "k": 50, "seg": 0, "grp": "panitia"}, {"no": 4, "cat": "POLISI", "vals": {"SECURITY": 20}, "row": 7, "k": 20, "seg": 0, "grp": "panitia"}, {"no": 5, "cat": "TNI", "vals": {"SECURITY": 6}, "row": 8, "k": 6, "seg": 0, "grp": "panitia"}, {"no": 6, "cat": "PECALANG", "vals": {"SECURITY": 12}, "row": 9, "k": 12, "seg": 0, "grp": "panitia"}, {"no": 7, "cat": "LINMAS", "vals": {"SECURITY": 2}, "row": 10, "k": 2, "seg": 0, "grp": "panitia"}, {"no": 8, "cat": "MEDIC (AMBULANCE)", "vals": {"SUPPORTING - FIRST AIDER": 8}, "row": 11, "k": 8, "seg": 0, "grp": "panitia"}, {"no": 9, "cat": "DAMKAR", "vals": {"SUPPORTING - FIRE FIGHTER": 4}, "row": 12, "k": 4, "seg": 0, "grp": "panitia"}, {"no": 10, "cat": "ISYANA", "vals": {"TALENT": 5}, "row": 13, "k": 5, "seg": 0, "grp": "talent"}, {"no": 11, "cat": "BAKUUCAKAR", "vals": {"TALENT": 21}, "row": 14, "k": 21, "seg": 0, "grp": "talent"}, {"no": 12, "cat": "LEEYONK", "vals": {"TALENT": 15}, "row": 15, "k": 15, "seg": 0, "grp": "talent"}, {"no": 13, "cat": "HARMONIA", "vals": {"TALENT": 15}, "row": 16, "k": 15, "seg": 0, "grp": "talent"}, {"no": 14, "cat": "DIALOG DINI HARI", "vals": {"TALENT": 13}, "row": 17, "k": 13, "seg": 0, "grp": "talent"}, {"no": 15, "cat": "DJ DIO", "vals": {"TALENT": 4}, "row": 18, "k": 4, "seg": 0, "grp": "talent"}, {"no": 16, "cat": "BALI JUNIOR", "vals": {"TALENT": 8}, "row": 19, "k": 8, "seg": 0, "grp": "talent"}, {"no": 17, "cat": "GOURMET", "vals": {"TENANT": 15}, "row": 21, "k": null, "seg": 1, "grp": "tenant_int"}, {"no": 18, "cat": "CULINARY", "vals": {"TENANT": 2}, "row": 22, "k": null, "seg": 1, "grp": "tenant_int"}, {"no": 19, "cat": "PBH QSR", "vals": {"TENANT": 32}, "row": 23, "k": null, "seg": 1, "grp": "tenant_int"}, {"no": 20, "cat": "PAN Group - Wine", "vals": {"TENANT": 20}, "row": 25, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 21, "cat": "PAN Beer", "vals": {"TENANT": 20}, "row": 26, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 22, "cat": "Iceland Vodka Mix - OT Group", "vals": {"TENANT": 20}, "row": 27, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 23, "cat": "Esham Dima - Guinnes Beer", "vals": {"TENANT": 10}, "row": 28, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 24, "cat": "Red Bull- Pratama Agung Niaga", "vals": {"TENANT": 20}, "row": 29, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 25, "cat": "DELTA PUSAKA INDAH-PASEO", "vals": {"TENANT": 20}, "row": 30, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 26, "cat": "Le Minerale - Mayora", "vals": {"TENANT": 20}, "row": 31, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 27, "cat": "Dos Hermanos", "vals": {"TENANT": 6}, "row": 32, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 28, "cat": "Relx - Omega Technology Indo", "vals": {"TENANT": 10}, "row": 33, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 29, "cat": "Singaraja Beer- OT Group", "vals": {"TENANT": 10}, "row": 34, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 30, "cat": "Multi Bintang", "vals": {"TENANT": 10}, "row": 35, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 31, "cat": "Coca Cola Distribution Indonesia", "vals": {"TENANT": 10}, "row": 36, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 32, "cat": "Nirwana Lestari", "vals": {"TENANT": 10}, "row": 37, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 33, "cat": "Nescafe - Nestle Indonesia", "vals": {"TENANT": 10}, "row": 38, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 34, "cat": "Pandawa", "vals": {"TENANT": 10}, "row": 39, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 35, "cat": "Yava", "vals": {"TENANT": 10}, "row": 40, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 36, "cat": "Francis - Pangan Kreasi Makmur", "vals": {"TENANT": 10}, "row": 41, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 37, "cat": "P&G BORWITA CITRA PRIMA,PT", "vals": {"TENANT": 10}, "row": 42, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 38, "cat": "Sewu Segar", "vals": {"TENANT": 10}, "row": 43, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 39, "cat": "Laris Manis Utama", "vals": {"TENANT": 10}, "row": 44, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 40, "cat": "Catur Pilar-Rawjute", "vals": {"TENANT": 10}, "row": 45, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 41, "cat": "Pringles - KELLANOVA", "vals": {"TENANT": 6}, "row": 46, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 42, "cat": "PT Indofood Fortuna Makmur (Chitato)", "vals": {"TENANT": 6}, "row": 47, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 43, "cat": "Delta Pusaka -Oreo", "vals": {"TENANT": 6}, "row": 48, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 44, "cat": "Trio-Natural", "vals": {"TENANT": 6}, "row": 49, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 45, "cat": "TIGARAKSA SATRIA,PT - SAMYANG MIE", "vals": {"TENANT": 6}, "row": 50, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 46, "cat": "Dharma sumber daya- Grandi pasta", "vals": {"TENANT": 6}, "row": 51, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 47, "cat": "Milk Up", "vals": {"TENANT": 6}, "row": 52, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 48, "cat": "Jungle Gold", "vals": {"TENANT": 6}, "row": 53, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 49, "cat": "Kino food - Kaki Tiga", "vals": {"TENANT": 6}, "row": 54, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 50, "cat": "Haagendazs", "vals": {"TENANT": 6}, "row": 55, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 51, "cat": "Rajawali Asia Bali - AICE", "vals": {"TENANT": 6}, "row": 56, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 52, "cat": "DELTA SATRIA DEWATA-GLICO", "vals": {"TENANT": 6}, "row": 57, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 53, "cat": "CATUR SENTOSA ANUGERAH PT - GODREJ", "vals": {"TENANT": 6}, "row": 58, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 54, "cat": "Greenfields", "vals": {"TENANT": 6}, "row": 59, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 55, "cat": "Doni Jaya (Tani Unggul)", "vals": {"TENANT": 6}, "row": 60, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 56, "cat": "Momenta (Strawberindo)", "vals": {"TENANT": 6}, "row": 61, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 57, "cat": "Jenggo Fresh", "vals": {"TENANT": 6}, "row": 62, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 58, "cat": "Ojang Strawbery", "vals": {"TENANT": 6}, "row": 63, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 59, "cat": "Paletas", "vals": {"TENANT": 6}, "row": 64, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 60, "cat": "BALIHAI BEER", "vals": {"TENANT": 6}, "row": 65, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 61, "cat": "LOVINA BEACH BREWERY PT-STARK BEER", "vals": {"TENANT": 6}, "row": 66, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 62, "cat": "Tigersnuss", "vals": {"TENANT": 6}, "row": 67, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 63, "cat": "Indo Spirit -Kura kura beer", "vals": {"TENANT": 6}, "row": 68, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 64, "cat": "Delta Djakarta", "vals": {"TENANT": 6}, "row": 69, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 65, "cat": "Etira", "vals": {"TENANT": 6}, "row": 70, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 66, "cat": "Etira", "vals": {"TENANT": 6}, "row": 71, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 67, "cat": "Etira", "vals": {"TENANT": 6}, "row": 72, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 68, "cat": "Corona", "vals": {"TENANT": 10}, "row": 73, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 69, "cat": "Pepito Private Label", "vals": {"TENANT": 20}, "row": 74, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 70, "cat": "Karunia Sukses Gemilang- KSG fOOD", "vals": {"TENANT": 6}, "row": 75, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 71, "cat": "Velo - BAT", "vals": {"TENANT": 20}, "row": 76, "k": null, "seg": 2, "grp": "tenant_sup"}, {"no": 72, "cat": "Wismilak -Cigar", "vals": {"TENANT": 6}, "row": 77, "k": null, "seg": 2, "grp": "tenant_sup"}], "badgeTotals": {"ALL ACCESS": 44, "CREW": 104, "TALENT": 81, "TENANT": 539, "SECURITY": 90, "SUPPORTING - LOGISTIC": 17, "SUPPORTING - VALLET": 8, "SUPPORTING - FIRE FIGHTER": 12, "SUPPORTING - FIRST AIDER": 14}, "badgeCols": ["ALL ACCESS", "CREW", "TALENT", "TENANT", "SECURITY", "SUPPORTING - LOGISTIC", "SUPPORTING - VALLET", "SUPPORTING - FIRE FIGHTER", "SUPPORTING - FIRST AIDER"], "grandExcel": 909, "konsumsi": {"title": "List Konsumsi", "days": [{"day": "Jumat, 23 Okt", "meal": "Lunch"}, {"day": "Jumat, 23 Okt", "meal": "Dinner"}, {"day": "Sabtu, 24 Okt", "meal": "Lunch"}, {"day": "Sabtu, 24 Okt", "meal": "Dinner"}], "rows": [{"no": null, "grp": "Pimpinan", "dept": "Steering Commitee", "jumlah": 2, "meals": [2, 2, 2, 2], "pic": "Tim Catering"}, {"no": null, "grp": "Pimpinan", "dept": "Event Director", "jumlah": 1, "meals": [null, null, 1, 1], "pic": "Melinda"}, {"no": null, "grp": "Pimpinan", "dept": "Bendahara", "jumlah": 3, "meals": [null, null, 3, 3], "pic": "Adi Astra"}, {"no": 1, "grp": "Panitia", "dept": "Team Event", "jumlah": 12, "meals": [12, 12, 12, 12], "pic": "Depri"}, {"no": 2, "grp": "Panitia", "dept": "Team Talent & Backstage", "jumlah": 8, "meals": [null, null, 8, 8], "pic": "Jaya & Rio"}, {"no": 3, "grp": "Panitia", "dept": "Team Production", "jumlah": 5, "meals": [5, 5, 5, 5], "pic": "Rohman & Yahya"}, {"no": 4, "grp": "Panitia", "dept": "Team Logistic", "jumlah": 22, "meals": [11, 11, 22, 22], "pic": "Ngurah Adi & Imron"}, {"no": 5, "grp": "Panitia", "dept": "Team VIP & Guest Relation", "jumlah": 15, "meals": [null, null, 15, 15], "pic": "Lenny & Dika"}, {"no": 6, "grp": "Panitia", "dept": "Team Registration & Ticketing", "jumlah": 43, "meals": [7, 7, 43, 43], "pic": "Irvan & Hari"}, {"no": 7, "grp": "Panitia", "dept": "Team Tenant", "jumlah": 12, "meals": [7, 7, 12, 12], "pic": "Yully & Weda"}, {"no": 8, "grp": "Panitia", "dept": "Team Catering", "jumlah": 10, "meals": [7, 7, 10, 10], "pic": "Fendi & Rimba"}, {"no": 9, "grp": "Panitia", "dept": "Team Dokumentasi", "jumlah": 5, "meals": [null, null, 5, 5], "pic": "Agil & Agus"}, {"no": 10, "grp": "Panitia", "dept": "Team Security & Safety", "jumlah": 9, "meals": [null, 9, 9, 9], "pic": "Subiran & Indra"}, {"no": 11, "grp": "Panitia", "dept": "First Aider", "jumlah": 6, "meals": [null, null, 6, 6], "pic": "Subiran & Doni"}, {"no": 12, "grp": "Panitia", "dept": "First Fighter", "jumlah": 8, "meals": [null, null, 8, 8], "pic": "Subiran & Hironimu"}, {"no": 13, "grp": "Panitia", "dept": "Team Vallet", "jumlah": 8, "meals": [null, null, 8, 8], "pic": "Subiran & Firmansyah"}, {"no": 14, "grp": "Panitia", "dept": "Team IT", "jumlah": 10, "meals": [5, 10, 10, 10], "pic": "Sastra & Rudi"}, {"no": 15, "grp": "Panitia", "dept": "Team Sembahyang", "jumlah": 8, "meals": [null, null, 8, 8], "pic": "Oka & Supratman"}, {"no": 16, "grp": "Bukan Panitia", "dept": "MC", "jumlah": 2, "meals": [null, null, 2, 2], "pic": "Team Catering"}, {"no": 17, "grp": "Bukan Panitia", "dept": "Usher", "jumlah": 5, "meals": [null, null, 5, 5], "pic": "Team Catering"}, {"no": 18, "grp": "Bukan Panitia", "dept": "Culinary", "jumlah": 2, "meals": [2, 2, 2, 2], "pic": "Mita"}, {"no": 19, "grp": "Bukan Panitia", "dept": "Gourmet", "jumlah": 15, "meals": [null, 15, 15, 15], "pic": "Astiti"}, {"no": 20, "grp": "Bukan Panitia", "dept": "PBH & QSR", "jumlah": 32, "meals": [null, 15, 32, 32], "pic": "Dian"}, {"no": 21, "grp": "Bukan Panitia", "dept": "Rama Shinta", "jumlah": 25, "meals": [null, null, 25, 25], "pic": "Satria"}, {"no": 22, "grp": "Bukan Panitia", "dept": "Security", "jumlah": 50, "meals": [5, 5, 50, 50], "pic": "Team Catering & Subiran"}, {"no": 23, "grp": "Bukan Panitia", "dept": "Polisi - TNI - Linmas", "jumlah": 28, "meals": [null, null, 28, 28], "pic": "Team Catering & Subiran"}, {"no": 24, "grp": "Bukan Panitia", "dept": "Pecalang", "jumlah": 12, "meals": [null, null, 12, 12], "pic": "Team Catering & Subiran"}, {"no": 25, "grp": "Bukan Panitia", "dept": "Ambulance & Damkar", "jumlah": 12, "meals": [null, null, 12, 12], "pic": "Team Catering & Subiran"}], "total": {"jumlah": 370, "meals": [63, 107, 370, 370]}}, "invite": [{"name": "PT", "col": 2, "kind": "name", "items": [{"no": 1, "v": ["Pak John Sastrawan", null], "row": 3}, {"no": 2, "v": ["Pak Nyoman Santiawan", null], "row": 4}, {"no": 3, "v": ["Pak Freddy", null], "row": 5}, {"no": 4, "v": ["Pak Wibisana H", null], "row": 6}, {"no": 5, "v": ["Ibu Ninik S", null], "row": 7}, {"no": 6, "v": ["Pak Nyoman Taktik", null], "row": 8}, {"no": 7, "v": ["Pak Ronald", null], "row": 9}, {"no": 8, "v": ["Pak Ramesh", null], "row": 10}, {"no": 9, "v": ["Pak Jeffry Hindarta", null], "row": 11}, {"no": 10, "v": ["Ibu Janice S", null], "row": 12}, {"no": 11, "v": ["Pak James S", null], "row": 13}, {"no": 12, "v": ["Pak George S", null], "row": 14}]}, {"name": "Sister Company", "col": 2, "kind": "qty", "items": [{"no": 1, "v": ["Pak Eva - Rama Group", 5], "row": 17}, {"no": 2, "v": ["Ramayana Hotel", 3], "row": 18}, {"no": 3, "v": ["Kuta Seaview Hotel", 3], "row": 19}, {"no": 4, "v": ["Rama Garden Hotel", 3], "row": 20}, {"no": 5, "v": ["Rama Padma Hotel", 3], "row": 21}, {"no": 6, "v": ["Rama Residance", 3], "row": 22}, {"no": 7, "v": ["Rama Candidasa", 3], "row": 23}, {"no": 8, "v": ["Pondok Sari Hotel", 3], "row": 24}, {"no": 9, "v": ["Ramayana Candidasa", 3], "row": 25}, {"no": 10, "v": ["Ramayana Tabikobo", 3], "row": 26}, {"no": 11, "v": ["TSM", 3], "row": 27}, {"no": 12, "v": ["Pak Albert", 3], "row": 28}]}, {"name": "Restaurants", "col": 2, "kind": "qty", "items": [{"no": 1, "v": ["Wanaku", 3], "row": 31}, {"no": 2, "v": ["Pepito Café", 3], "row": 32}, {"no": 3, "v": ["Take Japanese Cuisine", 3], "row": 33}, {"no": 4, "v": ["Bali Inti Kulinari", 3], "row": 34}, {"no": 5, "v": ["SPS", 5], "row": 35}, {"no": 6, "v": ["SWJ", 5], "row": 36}, {"no": 7, "v": ["M Mart ( All Head )", 12], "row": 37}, {"no": 8, "v": [null, null], "row": 38}, {"no": 9, "v": [null, null], "row": 39}, {"no": 10, "v": [null, null], "row": 40}]}, {"name": "Supplier OI MKT", "col": 6, "kind": "qty", "items": [{"no": 1, "v": ["United Indobali - Suzuki", 2], "row": 3}, {"no": 2, "v": ["Astra International - Honda", 2], "row": 4}, {"no": 3, "v": ["Indoselis", 2], "row": 5}, {"no": 4, "v": ["Eka Jaya - Fast ferry", 2], "row": 6}, {"no": 5, "v": ["Grab", 2], "row": 7}, {"no": 6, "v": [null, 2], "row": 8}, {"no": 7, "v": [null, 2], "row": 9}, {"no": 8, "v": [null, null], "row": 10}, {"no": 9, "v": [null, null], "row": 11}, {"no": 10, "v": [null, null], "row": 12}]}, {"name": "Bank", "col": 6, "kind": "qty", "items": [{"no": 1, "v": ["BRI", 6], "row": 17}, {"no": 2, "v": ["MANDIRI", 2], "row": 18}, {"no": 3, "v": ["BCA", 2], "row": 19}, {"no": 4, "v": ["CIMB NIAGA", 6], "row": 20}, {"no": 5, "v": ["BPR LESTARI", 2], "row": 21}, {"no": 6, "v": ["PERMATA", 2], "row": 22}, {"no": 7, "v": ["BSI", 2], "row": 23}]}, {"name": "Pak San Invitation", "col": 10, "kind": "person", "items": [{"no": 1, "v": ["Mr. ZHANG Zhisheng", "Consulate General of The People’s Republic of CHINA Consul-General"], "row": 3}, {"no": 2, "v": ["Mr. Dr. Shashank VIKRAM", "Consulate General of INDIA - Consul-General"], "row": 4}, {"no": 3, "v": ["Mr. MIYAKAWA Katsutoshi", "Consulate General of JAPAN - Consul-General"], "row": 5}, {"no": 4, "v": ["Mr. HAN Sa", "Consulate General of Republic of South KOREA Consul-General"], "row": 6}, {"no": 5, "v": ["Ms. Jo STEVENS", "Consulate General of AUSTRALIA Consul-General"], "row": 7}, {"no": 6, "v": ["Mr. Joseph S. CURTIN", "Consular Agency of the U.S.A - Consular Agent"], "row": 8}, {"no": 7, "v": ["Mr. Nigel GREETHAM", "BRITISH CONSULATE - His Majesty´s Consul Bali"], "row": 9}, {"no": 8, "v": ["Bapak I Made Ariandi", "Ketua KADIN Bali -"], "row": 10}, {"no": 9, "v": ["Ida Bagus Rai Budiarsa", "Hatten Wines Owner"], "row": 11}, {"no": 10, "v": [null, null], "row": 12}, {"no": 11, "v": [null, null], "row": 13}, {"no": 12, "v": [null, null], "row": 14}]}, {"name": "Supplier Invitation", "col": 14, "kind": "supplier", "items": [{"no": 1, "v": ["Sakti Abadi Kilat", "Vinca", "Marketing"], "row": 4}, {"no": 2, "v": ["Sakti Abadi Kilat", "Helbet", "Owner"], "row": 5}, {"no": 3, "v": ["Sakti Abadi Kilat", "Lina", "Marketing Manager"], "row": 6}, {"no": 4, "v": ["Laris Manis Utama", "Paulus", "Branch Manager"], "row": 7}, {"no": 5, "v": ["Laris Manis Utama", "Rudy", "Sales Manager"], "row": 8}, {"no": 6, "v": ["Ojang Strawberry", "Ojang Muhammad", "Owner"], "row": 9}, {"no": 7, "v": ["Ojang Strawberry", "Istri Ojang Muhammad", "Pendamping"], "row": 10}, {"no": 8, "v": ["Jenggo Fresh", "Ni Ketut Sadiasih", "Owner"], "row": 11}, {"no": 9, "v": ["Jenggo Fresh", "Suami Ni Ketut Sadiasih", "Pendamping"], "row": 12}, {"no": 10, "v": ["Doni Jaya", "Komang Doni Artawan", "Owner"], "row": 13}, {"no": 11, "v": ["Sewu Segar Nusantara", "Yulli D Indriasari", "Sales MT Director"], "row": 14}, {"no": 12, "v": ["Sewu Segar Nusantara", "Niko Ari R", "National Key Account Manager"], "row": 15}, {"no": 13, "v": ["Sewu Segar Nusantara", "Naura Farradiena", "Key Account Manager"], "row": 16}, {"no": 14, "v": ["Sewu Segar Nusantara", "Aiven Agustin", "Branch Head Manager Bali"], "row": 17}, {"no": 15, "v": ["Mayindo", "Francis Fudhia Zaelani", "Regional Sales Manager"], "row": 18}, {"no": 16, "v": ["Paletas", "Liza", "Owner"], "row": 19}, {"no": 17, "v": ["Paletas", "Yulia", "Direktur"], "row": 20}, {"no": 18, "v": ["Paletas", "Aristo", "Sales Manager"], "row": 21}, {"no": 19, "v": ["Paletas", "Wilan", "FAM"], "row": 22}, {"no": 20, "v": ["Paletas", "Ayik", "HRM"], "row": 23}, {"no": 21, "v": ["Momenta", "Bp. Sahat", "General Manager"], "row": 24}, {"no": 22, "v": ["Delta Food", "Bp. Sigit", null], "row": 25}, {"no": 23, "v": ["Delta Food", "Bp. Rudy", null], "row": 26}, {"no": 24, "v": ["Delta Food", "Bp. Vikky", "BDM Etira"], "row": 27}, {"no": 25, "v": ["Sinar Bali - Mayora", "Andre Prasetya", "Regional Sales Manager (RSM)"], "row": 28}, {"no": 26, "v": ["Sinar Bali - Mayora", "Arya Sarjana", "Sales Supervisor (SS)"], "row": 29}, {"no": 27, "v": ["Sinar Bali - Mayora", "Syarif", "GM Sales"], "row": 30}, {"no": 28, "v": ["Bali Coklat", "Ida Bagus Nama Rupa", "Director"], "row": 31}, {"no": 29, "v": ["Bali Coklat", "Marthen", "Manager"], "row": 32}, {"no": 30, "v": ["Bali Coklat", "Tobias Challenge Garrit", "Direktur Utama"], "row": 33}, {"no": 31, "v": ["Coca-Cola", "Achmad Imam Marga", "GKAM MTI"], "row": 34}, {"no": 32, "v": ["Coca-Cola", "Tomson Pangaribuan", "RKAM MTI"], "row": 35}, {"no": 33, "v": ["Coca-Cola", "Julpan Ongli Pangaribuan", "LKAM MTI"], "row": 36}, {"no": 34, "v": ["Coca-Cola", "Moza Dio Pangestu", "AM MTI"], "row": 37}, {"no": 35, "v": ["Faris Jaya Makmur", "Kimmo", "CEO"], "row": 38}, {"no": 36, "v": ["Faris Jaya Makmur", "Farah", "Direktur"], "row": 39}, {"no": 37, "v": ["Faris Jaya Makmur", "Basilus", "General Manager"], "row": 40}, {"no": 38, "v": ["Faris Jaya Makmur", "Fahri", "Marketing Manager"], "row": 41}, {"no": 39, "v": ["Multi Bintang Indonesia", "Hilton Simamora", "RSM"], "row": 42}, {"no": 40, "v": ["Multi Bintang Indonesia", "Erwin", "RTMM"], "row": 43}, {"no": 41, "v": ["Multi Bintang Indonesia", "Friska", "ABM"], "row": 44}, {"no": 42, "v": ["Multi Bintang Indonesia", "Citra", "KAM"], "row": 45}, {"no": 43, "v": ["Multi Bintang Indonesia", "Wayan", "AM Distributor"], "row": 46}, {"no": 44, "v": ["Nestlé Indonesia", "Lely Yovina Panjaitan", "Regional Manager Nestlé Bali Nusra"], "row": 47}, {"no": 45, "v": ["Nestlé Indonesia", "Hardianto Riski", "Area Manager Bali"], "row": 48}, {"no": 46, "v": ["Nestlé Indonesia", "Adeeva Rochman", "Regional Key Account Manager Bali Nusra"], "row": 49}, {"no": 47, "v": ["Nestlé Indonesia", "Istri Adeeva Rochman", "Pendamping"], "row": 50}, {"no": 48, "v": ["Häagen-Dazs", "Syanti", "General Manager"], "row": 51}, {"no": 49, "v": ["Häagen-Dazs", "Doni", "Head Sales National"], "row": 52}, {"no": 50, "v": ["Dharma Sumberdaya", "Siska", "Direktur"], "row": 53}, {"no": 51, "v": ["Trio Natural", "Renaldy", "Owner"], "row": 54}, {"no": 52, "v": ["Trio Natural", "Regina", "Owner"], "row": 55}, {"no": 53, "v": ["KSG", "Benny", "Area Manager Bali"], "row": 56}, {"no": 54, "v": ["KSG", "Istri Benny", "Pendamping"], "row": 57}, {"no": 55, "v": ["Greenfields", "Yoshi Wijaya", "COO"], "row": 58}, {"no": 56, "v": ["Greenfields", "Amanda", "Head of Modern Trade"], "row": 59}, {"no": 57, "v": ["Greenfields", "Arief Permadi", "RSM"], "row": 60}, {"no": 58, "v": ["Greenfields", "Taufiq Romadhon", "NKAM"], "row": 61}, {"no": 59, "v": ["L'Oréal", "Fery Hartanto", "KAM"], "row": 62}, {"no": 60, "v": ["L'Oréal", "Heru Puguh Santoso", "ASM"], "row": 63}, {"no": 61, "v": ["L'Oréal", "Benny Trihardoyo Wicaksono", "RSM"], "row": 64}, {"no": 62, "v": ["L'Oréal", "Steve", "Sales Manager"], "row": 65}, {"no": 63, "v": ["L'Oréal", "Tutiani", "SPV"], "row": 66}, {"no": 64, "v": ["L'Oréal", "Dian Irawati", "RKAM"], "row": 67}, {"no": 65, "v": ["Aice", "Wawan", "ASM"], "row": 68}, {"no": 66, "v": ["Aice", "Mahadewi", "General Manager"], "row": 69}, {"no": 67, "v": ["Aice", "Mr. Jason", "Owner Distributor"], "row": 70}, {"no": 68, "v": ["Aice", "Aulia", "FAM"], "row": 71}, {"no": 69, "v": ["Aice", "Bayu", "OM Distributor"], "row": 72}, {"no": 70, "v": ["Red Bull", "Adi Prasetiya Subianto", "Head of Sales Red Bull Off Premise"], "row": 73}, {"no": 71, "v": ["Red Bull", "Nur Hisanun", "Key Account Manager"], "row": 74}, {"no": 72, "v": ["Red Bull", "Edwin", "Area Sales Manager Bali"], "row": 75}, {"no": 73, "v": ["Kino Food - Kaki Tiga", "Ilham", "Head of Region Bali Nusra"], "row": 76}, {"no": 74, "v": ["Kino Food - Kaki Tiga", "Luh Suarjani", "Business Manager MT"], "row": 77}, {"no": 75, "v": ["Kino Food - Kaki Tiga", "Bagus Lingga Puspayoga", "BAcO Bali"], "row": 78}, {"no": 76, "v": ["Kino Food - Kaki Tiga", "Ayu Purnama Dewi", "Head Supervisor"], "row": 79}, {"no": 77, "v": ["Pandawa Rezeki", "Mamat", "Head of Marketing"], "row": 80}, {"no": 78, "v": ["Pandawa Rezeki", "Rully", "Direktur"], "row": 81}, {"no": 79, "v": ["Pandawa Rezeki", "Jimmy", "Owner"], "row": 82}]}]};
+
+const BADGE = {
+  'All Access':{k:'aa',label:'All Access'}, 'Crew':{k:'crew',label:'Crew'},
+  'First Aider':{k:'fa',label:'First Aider'}, 'Fire Fighter':{k:'ff',label:'Fire Fighter'},
+  'Talent':{k:'talent',label:'Talent'}, 'Tenant':{k:'tenant',label:'Tenant'}, 'Security':{k:'sec',label:'Security'},
+  'Steering Committee':{k:'sc',label:'Steering Committee'}, 'Supporting Logistic':{k:'log',label:'Supporting Logistic'}, 'Supporting - Logistic':{k:'log',label:'Supporting - Logistic'},
+  'Supporting - Vallet':{k:'val',label:'Supporting - Vallet'}, 'Supporting - Fire Fighter':{k:'ff',label:'Supporting - Fire Fighter'},
+  'Supporting - First Aider':{k:'fa',label:'Supporting - First Aider'},
+  '__none':{k:'none',label:'Tanpa Badge'}
+};
+const DIVNAME = {'EVENT & ACTIVITY':'Event & Activity','TALENT & BACKSTAGE':'Talent & Backstage','PRODUCTION':'Production','LOGISTIK':'Logistik',
+  'VIP & GUEST RELATIONS':'VIP & Guest Relations','REGISTRATION & TICKETING':'Registration & Ticketing','TENANT':'Tenant','CATERING':'Catering',
+  'DOCUMENTATION':'Documentation','SECURITY & SAFETY':'Security & Safety','IT':'IT','SEMBAHYANG':'Sembahyang'};
+const LEAD = {'Lenny & Widi':'Lenny & Widi','Ngurah Adi':'Ngurah Adi'};
+const fixSub = s => s ? s.replace(/\bVip\b/,'VIP') : s;
+const esc = s => String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $ = s => document.querySelector(s);
+const badgeHTML = b => { const m = BADGE[b||'__none']; return `<span class="bdg k-${m.k}">${m.label}</span>`; };
+
+// lookup badge for chart names
+const people = DATA.people;
+const byName = {};
+people.forEach(p => { const k = p.nama.toLowerCase(); (byName[k] ||= []).push(p); });
+const divColor = {};
+DATA.divs.forEach(d => divColor[DIVNAME[d.raw]] = d.color);
+divColor['Supporting - First Aider'] = divColor['Supporting - Fire Fighter'] = divColor['Supporting - Vallet'] = divColor['Security & Safety'];
+const SPECIAL = {'Steering Committee':'#1B5E20','Event Director':'#2E7D32','Vice Chairman':'#2E7D32','Sekretariat & Administrasi':'#558B2F','Bendahara':'#558B2F'};
+Object.assign(divColor, SPECIAL);
+function findPerson(raw, bagianHints){
+  const k = raw.replace(/\s*\(.*$/,'').trim().toLowerCase();
+  const list = byName[k] || [];
+  if (list.length <= 1) return list[0];
+  return list.find(p => bagianHints.includes(p.bagian)) || list[0];
+}
+
+// ===== stats
+const cnt = {}; people.forEach(p => cnt[p.badge||'__none'] = (cnt[p.badge||'__none']||0)+1);
+const bt = DATA.badgeTotals; const grand = Object.values(bt).reduce((a,b)=>a+(b||0),0);
+$('#stats').innerHTML = [
+  [people.length,'Total Tim'],[DATA.divs.length,'Bagian'],[bt['ALL ACCESS'],'All Access'],[bt['CREW'],'Crew'],[grand,'Total Badge']
+].map(([v,l])=>`<div class="stat"><b class="num">${v}</b><span>${l}</span></div>`).join('');
+
+// ===== BAGAN
+const badgeKeys = ['Steering Committee','All Access','Crew','Supporting Logistic','Supporting - Logistic','Supporting - Vallet','Supporting - Fire Fighter','Supporting - First Aider','First Aider','Fire Fighter','__none'].filter(k => cnt[k]);
+$('#legend').innerHTML = 'Tag badge:' + badgeKeys.map(b=>badgeHTML(b==='__none'?null:b)).join('');
+const P = n => people.find(p=>p.nama===n);
+$('#tree').innerHTML = `
+  <div class="trow"><div class="node top"><div class="role">Steering Committee</div><div class="who">${esc(DATA.top['STEERING COMMITTEE'])}</div></div></div>
+  <div class="vrow"><div class="vline"></div></div>
+  <div class="trow">
+    <div class="node"><div class="role">Event Director</div><div class="who">${esc(DATA.top['EVENT DIRECTOR'])}</div></div>
+    <div class="side"><span class="dash"></span><div class="node sek"><div class="role">Bendahara</div><div class="who">${esc(DATA.top['BENDAHARA'])}</div></div></div>
+  </div>
+  <div class="vrow"><div class="vline"></div></div>
+  <div class="trow">
+    <div class="node"><div class="role">Vice Chairman</div><div class="who">${esc(DATA.top['VICE CHAIRMAN'])}</div></div>
+    <div class="side"><span class="dash"></span><div class="node sek"><div class="role">Sekretariat &amp; Administrasi</div><div class="who">${esc(DATA.top['SEKRETARIAT & ADMINISTRASI'])}</div></div></div>
+  </div>
+  <div class="vrow"><div class="vline"></div></div>
+  <div class="bus"></div>`;
+
+function renderChart(){
+  const q = $('#q-chart').value.trim().toLowerCase();
+  const card = d => {
+    const name = DIVNAME[d.raw] || d.name;
+    const wide = d.groups.some(g => g.name);
+    const list = g => {
+      const hints = [name, 'Vice Chairman','Sekretariat & Administrasi'].concat(g.name ? [fixSub(g.name)] : []);
+      return `<ol>${g.members.map((m, idx) => {
+        const p = findPerson(m, hints);
+        const b = BADGE[(p && p.badge) || '__none'];
+        const paren = m.match(/\((.*)$/);
+        const base = m.replace(/\s*\(.*$/,'');
+        const hit = q && m.toLowerCase().includes(q);
+        return `<li class="${hit?'hit':''}"><span class="n num">${idx+1}</span><span class="nm">${esc(base)}${paren?` <small>(${esc(paren[1].replace(/\)$/,''))})</small>`:''}</span><span class="dot k-${b.k}" title="${b.label}"></span></li>`;
+      }).join('')}</ol>`;
+    };
+    const head = `<div class="div-h"><div><h3>${esc(name)}</h3><div class="lead">Koordinator: ${esc(d.lead)}</div></div><span class="cnt num">${d.count}</span></div>`;
+    const body = d.groups.map(g => (g.name ? `<div class="sub"><span>${esc(fixSub(g.name))}</span><span class="num">${g.members.length}</span></div>` : '') + list(g)).join('');
+    return `<article class="div" style="--c:${d.color}">${head}${body}</article>`;
+  };
+  $('#divgrid').innerHTML = DATA.divs.map(card).join('');
+  if (q){ const h = document.querySelector('.div li.hit'); if (h) h.scrollIntoView({block:'center',behavior:'smooth'}); }
+}
+$('#q-chart').addEventListener('input', renderChart);
+renderChart();
+
+// ===== DAFTAR
+const bagianOrder = [...new Set(people.map(p=>p.bagian))];
+$('#f-bagian').innerHTML = '<option value="">Semua bagian</option>' + bagianOrder.map(b=>`<option>${esc(b)}</option>`).join('');
+const depts = [...new Set(people.map(p=>p.dept))].sort();
+$('#f-dept').innerHTML = '<option value="">Semua dept</option>' + depts.map(b=>`<option>${esc(b)}</option>`).join('');
+let fBadge = '';
+function chips(){
+  $('#f-badge').innerHTML = [['', 'Semua', people.length]].concat(badgeKeys.map(k=>[k, BADGE[k].label, cnt[k]||0]))
+    .map(([k,l,c])=>`<button class="chip" data-k="${k}" aria-pressed="${fBadge===k}">${l} <span class="c num">${c}</span></button>`).join('');
+}
+$('#f-badge').addEventListener('click', e => { const b = e.target.closest('.chip'); if(!b) return; fBadge = b.dataset.k; chips(); renderList(); });
+let sortK = 'no', sortDir = 1;
+document.querySelectorAll('#tbl th').forEach(th => th.addEventListener('click', () => {
+  const k = th.dataset.k; if (sortK === k) sortDir *= -1; else { sortK = k; sortDir = 1; }
+  document.querySelectorAll('#tbl th').forEach(t => t.removeAttribute('aria-sort'));
+  th.setAttribute('aria-sort', sortDir === 1 ? 'ascending' : 'descending'); renderList();
+}));
+function renderList(){
+  const q = $('#q-list').value.trim().toLowerCase(), fb = $('#f-bagian').value, fd = $('#f-dept').value;
+  let rows = people.filter(p =>
+    (!q || [p.nama,p.bagian,p.dept,p.badge].join(' ').toLowerCase().includes(q)) &&
+    (!fb || p.bagian === fb) && (!fd || p.dept === fd) &&
+    (!fBadge || (p.badge || '__none') === fBadge));
+  rows.sort((a,b) => { const x = a[sortK] ?? '', y = b[sortK] ?? ''; return (typeof x === 'number' ? x - y : String(x).localeCompare(String(y))) * sortDir; });
+  $('#res').textContent = `${rows.length} dari ${people.length} anggota`;
+  $('#tbl tbody').innerHTML = rows.length ? rows.map(p => `<tr>
+    <td class="no num">${p.no}</td><td><b>${esc(p.nama)}</b></td>
+    <td><span class="bag" style="--c:${divColor[p.bagian]||'#888'}"><i></i>${esc(p.bagian)}</span></td>
+    <td>${esc(p.dept)}</td><td>${badgeHTML(p.badge)}</td></tr>`).join('')
+    : `<tr><td colspan="5" class="empty">Tidak ada anggota yang cocok. Ubah kata kunci atau filter.</td></tr>`;
+}
+['#q-list','#f-bagian','#f-dept'].forEach(s => $(s).addEventListener('input', renderList));
+chips(); renderList();
+
+// ===== BADGE
+const B = DATA.badge;
+const COLS = DATA.badgeCols;
+const KCOL = {'ALL ACCESS':'aa','CREW':'crew','TALENT':'talent','TENANT':'tenant','SECURITY':'sec','SUPPORTING - LOGISTIC':'log','SUPPORTING - VALLET':'val','SUPPORTING - FIRE FIGHTER':'ff','SUPPORTING - FIRST AIDER':'fa','FIRE FIGHTER':'ff','FIRST AIDER':'fa'};
+const titleCase = s => ['TNI','PBH QSR'].includes(s) ? s : s.toLowerCase().replace(/\b\w/g,m=>m.toUpperCase()).replace('Sterring Committe','Steering Committee').replace('(Ambulance)','(Ambulance)');
+const fmt = v => v == null ? '<span class="zero">–</span>' : v;
+const rowTotal = b => Object.values(b.vals).reduce((a,c)=>a+(c||0),0);
+// where each badge type comes from
+const sourceOf = c => {
+  const rows = B.filter(b => b.vals[c]);
+  if (c === 'TALENT') return `${rows.length} pengisi acara`;
+  if (c === 'TENANT') return `${rows.length} tenant & supplier`;
+  return rows.map(b => `${titleCase(b.cat)} ${b.vals[c]}`).join(' + ');
+};
+$('#bcards').innerHTML = COLS.map(c=>`<div class="idc k-${KCOL[c]||'none'}"><div class="slot"></div><b class="num">${bt[c]}</b><span>${titleCase(c).replace('Supporting - ','Supporting –<br>')}</span><small>${esc(sourceOf(c))}</small></div>`).join('')
+  + `<div class="idc total"><div class="slot"></div><b class="num">${grand}</b><span>Total Badge</span><small>Semua kategori</small></div>`;
+
+// panitia & keamanan
+const pan = B.filter(b => b.grp === 'panitia');
+const panCols = COLS.filter(c => pan.some(b => b.vals[c]));
+const isInternal = b => /STERRING|STEERING|PANITIA/.test(b.cat);
+const panRow = b => `<tr><td>${isInternal(b)?'<b>':''}${esc(titleCase(b.cat))}${isInternal(b)?'</b>':''}</td>${panCols.map(c=>`<td class="v num">${fmt(b.vals[c])}</td>`).join('')}<td class="v num"><b>${rowTotal(b)}</b></td></tr>`;
+const shortCol = c => c.replace('SUPPORTING - ','SUP. ');
+$('#t-pan').innerHTML = `<thead><tr><th>Kategori</th>${panCols.map(c=>`<th class="v" title="${c}">${shortCol(c)}</th>`).join('')}<th class="v">Total</th></tr></thead><tbody>
+  <tr class="grp"><td colspan="${panCols.length+2}">Internal</td></tr>
+  ${pan.filter(isInternal).map(panRow).join('')}
+  <tr class="grp"><td colspan="${panCols.length+2}">Eksternal</td></tr>
+  ${pan.filter(b=>!isInternal(b)).map(panRow).join('')}
+  <tr class="sum"><td>Total</td>${panCols.map(c=>`<td class="v num">${pan.reduce((a,b)=>a+(b.vals[c]||0),0)}</td>`).join('')}<td class="v num">${pan.reduce((a,b)=>a+rowTotal(b),0)}</td></tr></tbody>`;
+// talent
+const tal = B.filter(b => b.grp === 'talent');
+$('#t-tal').innerHTML = `<thead><tr><th>No</th><th>Talent</th><th class="v">Badge Talent</th></tr></thead><tbody>
+  ${tal.map(b=>{const v=b.vals['TALENT'];return `<tr><td class="no num">${b.no??''}</td><td>${esc(b.cat)}${!v?'<span class="tag-warn">Belum ada kuota</span>':''}</td><td class="v num"><b>${v||'<span class="zero">0</span>'}</b></td></tr>`}).join('')}
+  <tr class="sum"><td></td><td>Total</td><td class="v num">${tal.reduce((a,b)=>a+(b.vals['TALENT']||0),0)}</td></tr></tbody>`;
+// tenant
+const ten = B.filter(b => b.grp === 'tenant_int' || b.grp === 'tenant_sup');
+const tenTotal = ten.reduce((a,b)=>a+(b.vals['TENANT']||0),0);
+const tenMax = Math.max(...ten.map(b=>b.vals['TENANT']||0));
+const noQuota = ten.filter(b=>!b.vals['TENANT']);
+$('#ten-sub').textContent = `${ten.length} tenant · ${tenTotal} badge` + (noQuota.length ? ` · ${noQuota.length} belum ada kuota` : '');
+function renderTen(){
+  const q = $('#q-ten').value.trim().toLowerCase();
+  const list = ten.filter(b=>!q || b.cat.toLowerCase().includes(q));
+  $('#ten').innerHTML = list.length ? list.map(b=>{const v=b.vals['TENANT']||0; const internal = b.grp === 'tenant_int';
+    return `<li><span class="nm">${esc(b.cat)}${internal?' <span class="bdg k-tenant" style="font-size:9px;padding:1px 6px">Internal</span>':''}${!v?'<span class="tag-warn">Belum ada kuota</span>':''}</span>
+      <span class="bar"><i style="width:${v/tenMax*100}%"></i></span><span class="q num">${v||'<span class="zero">0</span>'}</span></li>`}).join('')
+    : `<li class="empty" style="display:block">Tidak ada tenant yang cocok.</li>`;
+}
+$('#q-ten').addEventListener('input', renderTen); renderTen();
+
+// notes (data checks)
+const etira = ten.filter(b=>b.cat==='Etira').length;
+const tagTo = {'ALL ACCESS':'All Access','CREW':'Crew','SUPPORTING - LOGISTIC':'Supporting - Logistic','SUPPORTING - VALLET':'Supporting - Vallet','SUPPORTING - FIRE FIGHTER':'Supporting - Fire Fighter','SUPPORTING - FIRST AIDER':'Supporting - First Aider'};
+const diffs = Object.entries(tagTo).filter(([c,tg]) => (bt[c]||0) !== (cnt[tg]||0)).map(([c,tg]) => {
+  const extra = B.filter(b => b.vals[c] && b.cat !== 'PANITIA').map(b => `${titleCase(b.cat)} ${b.vals[c]}`).join(' + ');
+  return `${titleCase(c)}: ${cnt[tg]||0} di daftar tim + ${extra} = ${bt[c]}`;
+});
+const noBadge = people.filter(p=>!p.badge).map(p=>p.nama);
+
+
+// ===== KONSUMSI
+const K = DATA.konsumsi;
+const dayShort = d => d.replace(/,.*$/,'');
+const kTot = K.total;
+const kSum = i => K.rows.reduce((a,r)=>a+(r.meals[i]||0),0);
+const kJml = K.rows.reduce((a,r)=>a+(r.jumlah||0),0);
+$('#meal-cards').innerHTML = `<div class="meal all"><div class="d">Total orang</div><b class="num">${kJml}</b><div class="m">${K.rows.length} dept / kelompok</div></div>`
+  + K.days.map((d,i)=>`<div class="meal ${d.meal.toLowerCase()}"><div class="d">${esc(d.day)}</div><b class="num">${kSum(i)}</b><div class="m">${esc(d.meal)} · porsi</div><div class="pct"><i style="width:${kSum(i)/kJml*100}%"></i></div></div>`).join('')
+  + `<div class="meal"><div class="d">Total porsi</div><b class="num">${[0,1,2,3].reduce((a,i)=>a+kSum(i),0)}</b><div class="m">4 kali makan</div></div>`;
+const daysUniq = [...new Set(K.days.map(d=>d.day))];
+function renderKons(){
+  const q = $('#q-kons').value.trim().toLowerCase();
+  const rows = K.rows.filter(r => !q || (r.dept+' '+(r.pic||'')).toLowerCase().includes(q));
+  const grps = [...new Set(K.rows.map(r=>r.grp))];
+  const cell = v => v ? v : '<span class="zero">–</span>';
+  let body = '';
+  grps.forEach(g => {
+    const rs = rows.filter(r=>r.grp===g); if (!rs.length) return;
+    body += `<tr class="grp"><td colspan="7">${esc(g)}</td></tr>`;
+    body += rs.map(r=>`<tr><td class="l">${esc(r.dept)}</td><td class="v num"><b>${r.jumlah}</b></td>${r.meals.map(m=>`<td class="v num">${cell(m)}</td>`).join('')}<td class="l pic">${esc(r.pic||'')}</td></tr>`).join('');
+    if (!q) { const all = K.rows.filter(r=>r.grp===g);
+      body += `<tr class="ksub"><td class="l">Subtotal ${esc(g)}</td><td class="v num">${all.reduce((a,r)=>a+r.jumlah,0)}</td>${[0,1,2,3].map(i=>`<td class="v num">${all.reduce((a,r)=>a+(r.meals[i]||0),0)}</td>`).join('')}<td></td></tr>`; }
+  });
+  if (!body) body = `<tr><td colspan="7" class="empty">Tidak ada dept atau PIC yang cocok.</td></tr>`;
+  $('#t-kons').innerHTML = `<thead><tr><th class="l" rowspan="2">Dept / Kelompok</th><th rowspan="2">Jumlah Orang</th>${daysUniq.map(d=>`<th colspan="${K.days.filter(x=>x.day===d).length}">${esc(d)}</th>`).join('')}<th class="l" rowspan="2">PIC</th></tr>
+    <tr>${K.days.map(d=>`<th>${esc(d.meal)}</th>`).join('')}</tr></thead>
+    <tbody>${body}${q?'':`<tr class="sum"><td class="l">Total</td><td class="v num">${kJml}</td>${[0,1,2,3].map(i=>`<td class="v num">${kSum(i)}</td>`).join('')}<td></td></tr>`}</tbody>`;
+}
+$('#q-kons').addEventListener('input', renderKons); renderKons();
+const kOk = kJml===kTot.jumlah && [0,1,2,3].every(i=>kSum(i)===kTot.meals[i]);
+
+// ===== INVITATION
+const INV = DATA.invite;
+const guests = g => g.kind==='qty' ? g.items.reduce((a,it)=>a+(typeof it.v[1]==='number'?it.v[1]:0),0) : g.items.filter(it=>it.v[0]).length;
+const invTotal = INV.reduce((a,g)=>a+guests(g),0);
+$('#inv-cards').innerHTML = `<div class="meal all"><div class="d">Total tamu</div><b class="num">${invTotal}</b><div class="m">${INV.length} kategori undangan</div></div>`
+  + INV.map(g=>`<div class="meal"><div class="d">${esc(g.name)}</div><b class="num">${guests(g)}</b><div class="m">${g.kind==='qty'?`${g.items.filter(it=>it.v[0]).length} instansi`:g.kind==='supplier'?`${new Set(g.items.map(it=>it.v[0])).size} perusahaan`:'tamu'}</div></div>`).join('');
+function renderInv(){
+  const q = $('#q-inv').value.trim().toLowerCase();
+  const match = it => !q || it.v.filter(Boolean).join(' ').toLowerCase().includes(q);
+  const html = INV.map(g => {
+    const items = g.items.filter(match); if (q && !items.length) return '';
+    if (g.kind === 'supplier') {
+      const allCos = [...new Set(g.items.map(it=>it.v[0]))];
+      const sel = supSel && allCos.includes(supSel) ? supSel : '';
+      const its = items.filter(it => !sel || it.v[0]===sel);
+      const cos = [...new Set(its.map(it=>it.v[0]))];
+      const openAll = !!q || !!sel || supOpen;
+      return `<div class="panel inv-span2"><h3>${esc(g.name)} · <span class="tot num">${guests(g)}</span> tamu</h3><p>${allCos.length} perusahaan. Pilih perusahaan atau klik namanya untuk melihat tamu.</p>
+        <div class="sup-tools"><select id="sup-sel" aria-label="Pilih perusahaan"><option value="">Semua perusahaan (${allCos.length})</option>${allCos.map(co=>`<option value="${esc(co)}"${co===sel?' selected':''}>${esc(co)} (${g.items.filter(it=>it.v[0]===co).length})</option>`).join('')}</select>
+        <button type="button" id="sup-toggle">${openAll?'Tutup semua':'Buka semua'}</button></div>
+        <div class="sup-body">${cos.map(co=>{const gs=its.filter(it=>it.v[0]===co);return `<details class="sup-co"${openAll?' open':''}><summary><span>${esc(co)}</span><span class="ct num">${gs.length}</span></summary><ul>${gs.map(it=>`<li><span>${esc(it.v[1]||'')}</span><span>${esc(it.v[2]||'–')}</span></li>`).join('')}</ul></details>`}).join('')}</div></div>`;
+    }
+    const li = items.map(it => {
+      const empty = !it.v[0];
+      const sub = g.kind==='person' && it.v[1] ? `<small>${esc(it.v[1])}</small>` : '';
+      const qty = g.kind==='qty' ? `<span class="q num">${typeof it.v[1]==='number'?it.v[1]+' org':'–'}</span>` : '<span></span>';
+      return `<li class="${empty?'empty-slot':''}"><span class="n num">${it.no??''}</span><span class="nm">${empty?'Belum diisi':esc(it.v[0])}${sub}</span>${qty}</li>`;
+    }).join('');
+    return `<div class="panel"><h3>${esc(g.name)} · <span class="tot num">${guests(g)}</span> tamu</h3><p>${g.kind==='qty'?'Jumlah tamu per instansi':g.kind==='person'?'Nama dan jabatan tamu':'Daftar nama tamu'}</p><ul class="inv-list">${li}</ul></div>`;
+  }).join('');
+  $('#inv-grid').innerHTML = html || '<div class="panel inv-wide"><p class="empty">Tidak ada tamu yang cocok. Ubah kata kunci pencarian.</p></div>';
+}
+let supSel = '', supOpen = false;
+$('#inv-grid').addEventListener('change', e => { if (e.target.id === 'sup-sel') { supSel = e.target.value; renderInv(); } });
+$('#inv-grid').addEventListener('click', e => { if (e.target.id === 'sup-toggle') { const open = e.target.textContent === 'Buka semua'; document.querySelectorAll('.sup-co').forEach(d => d.open = open); e.target.textContent = open ? 'Tutup semua' : 'Buka semua'; supOpen = open; } });
+$('#q-inv').addEventListener('input', renderInv); renderInv();
+const emptySlots = INV.map(g=>[g.name,g.items.filter(it=>!it.v[0])]).filter(([,e])=>e.length);
+
+// ===== tabs
+const tabs = document.querySelectorAll('nav.tabs button');
+function show(v){
+  tabs.forEach(t => t.setAttribute('aria-selected', t.dataset.v === v));
+  document.querySelectorAll('.view').forEach(s => s.hidden = s.id !== 'v-' + v);
+  try { localStorage.setItem('pc-tab', v); } catch(e){}
+}
+tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.v)));
+let start = (location.hash||'').slice(1);
+const VIEWS=['bagan','daftar','badge','konsumsi','invitation'];
+if (!VIEWS.includes(start)) { try { start = localStorage.getItem('pc-tab') || 'bagan'; } catch(e){ start = 'bagan'; } }
+show(VIEWS.includes(start) ? start : 'bagan');
+</script>
+
+</body>
+</html>
